@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UML Diagram — Sistem Informasi Yayasan Darul Furqan Pariaman</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg:        #0a0d14;
+    --bg2:       #0e1220;
+    --panel:     #131929;
+    --border:    #1e2d4a;
+    --actor:     #38bdf8;
+    --actor-bg:  #0c2a3e;
+    --usecase:   #4ade80;
+    --usecase-bg:#0b2e1a;
+    --admin:     #fb923c;
+    --admin-bg:  #2e1a0a;
+    --seq:       #a78bfa;
+    --seq-bg:    #1a1030;
+    --cls:       #f472b6;
+    --cls-bg:    #2e0a1a;
+    --note:      #facc15;
+    --muted:     #4a5568;
+    --text:      #e2e8f0;
+    --text2:     #94a3b8;
+    --hl:        #60a5fa;
+    --line:      #1e3a5f;
+    --r:         8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0a0d14 0%, #0e1a2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56,189,248,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  header h1 span { color: var(--actor); }
+  header p {
+    font-size: .78rem;
+    color: var(--text2);
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tag-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+  .tag-a { color: var(--actor); border-color: var(--actor); background: var(--actor-bg); }
+  .tag-u { color: var(--usecase); border-color: var(--usecase); background: var(--usecase-bg); }
+  .tag-o { color: var(--admin); border-color: var(--admin); background: var(--admin-bg); }
+  .tag-s { color: var(--seq); border-color: var(--seq); background: var(--seq-bg); }
+  .tag-c { color: var(--cls); border-color: var(--cls); background: var(--cls-bg); }
+
+  /* ── TABS ── */
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: .82rem;
+    font-weight: 700;
+    padding: 14px 24px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text2);
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+    white-space: nowrap;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--hl); border-bottom-color: var(--hl); }
+  .tab-btn[data-tab="usecase"].active { color: var(--usecase); border-bottom-color: var(--usecase); }
+  .tab-btn[data-tab="activity"].active { color: var(--actor); border-bottom-color: var(--actor); }
+  .tab-btn[data-tab="sequence"].active { color: var(--seq); border-bottom-color: var(--seq); }
+  .tab-btn[data-tab="class"].active { color: var(--cls); border-bottom-color: var(--cls); }
+
+  .tab-content { display: none; padding: 36px 40px; }
+  .tab-content.active { display: block; }
+
+  /* ── SECTION TITLES ── */
+  .sec-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .sec-sub {
+    font-size: .75rem;
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 28px;
+  }
+
+  /* ── SCROLLABLE DIAGRAM WRAPPER ── */
+  .diagram-scroll {
+    overflow-x: auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 24px;
+  }
+
+  /* ════════════════════════════════════════
+     USE CASE DIAGRAM
+  ════════════════════════════════════════ */
+  .uc-grid {
+    display: grid;
+    grid-template-columns: 170px 1fr 170px;
+    gap: 24px;
+    align-items: start;
+    min-width: 820px;
+  }
+  .actor-col { display: flex; flex-direction: column; gap: 16px; }
+  .actor-box {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; padding: 14px 10px;
+    background: var(--actor-bg);
+    border: 1px solid var(--actor);
+    border-radius: var(--r);
+    text-align: center;
+    position: relative;
+  }
+  .actor-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--actor);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .actor-box .name {
+    font-size: .7rem; font-weight: 700;
+    color: var(--actor); line-height: 1.3;
+  }
+  .actor-box .sub {
+    font-size: .6rem; color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  /* admin actor */
+  .actor-box.admin-actor {
+    background: var(--admin-bg);
+    border-color: var(--admin);
+  }
+  .actor-box.admin-actor .actor-icon { background: var(--admin); }
+  .actor-box.admin-actor .name { color: var(--admin); }
+
+  .uc-center { display: flex; flex-direction: column; gap: 16px; }
+  .uc-group { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+  .uc-group-title {
+    font-size: .7rem; font-weight: 700;
+    padding: 8px 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .uc-group-title.g-guest { background: #1a1a2e; color: var(--text2); }
+  .uc-group-title.g-siswa { background: #0a2010; color: var(--usecase); }
+  .uc-group-title.g-admin { background: #200e00; color: var(--admin); }
+  .uc-group-title.g-super { background: #1a0a20; color: var(--seq); }
+  .uc-items { padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; }
+  .uc-item {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid;
+    transition: transform .15s;
+    cursor: default;
+  }
+  .uc-item:hover { transform: translateX(4px); }
+  .uc-item.u { background: var(--usecase-bg); border-color: var(--usecase); color: var(--usecase); }
+  .uc-item.a { background: var(--admin-bg); border-color: var(--admin); color: var(--admin); }
+  .uc-item.s { background: var(--seq-bg); border-color: var(--seq); color: var(--seq); }
+  .uc-item.g { background: #1a1a2e; border-color: var(--muted); color: var(--text2); }
+  .uc-item .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .uc-note {
+    font-size: .6rem; font-family: 'JetBrains Mono', monospace;
+    color: var(--note); margin-left: 14px;
+  }
+
+  /* include/extend legend */
+  .rel-legend {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    margin-top: 20px; padding: 14px 18px;
+    background: var(--bg2); border-radius: var(--r);
+    border: 1px solid var(--border);
+  }
+  .rel-item { display: flex; align-items: center; gap: 8px; font-size: .7rem; }
+  .rel-line { width: 32px; height: 2px; }
+  .rel-line.inc { background: var(--usecase); }
+  .rel-line.ext { border-top: 2px dashed var(--admin); background: transparent; }
+
+  /* ════════════════════════════════════════
+     ACTIVITY DIAGRAM
+  ════════════════════════════════════════ */
+  .flow-wrap {
+    display: flex;
+    gap: 32px;
+    min-width: 860px;
+    align-items: flex-start;
+  }
+  .flow-col { flex: 1; }
+  .flow-label {
+    font-size: .65rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .fl-user { background: #0c2a3e; color: var(--actor); border: 1px solid var(--actor); }
+  .fl-sys  { background: #0b2e1a; color: var(--usecase); border: 1px solid var(--usecase); }
+  .fl-admin{ background: #2e1a0a; color: var(--admin); border: 1px solid var(--admin); }
+
+  .flow-nodes { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  .fnode {
+    width: 100%;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: .72rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+    position: relative;
+  }
+  .fnode.start, .fnode.end {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 700;
+    margin: 0 auto;
+  }
+  .fnode.start { background: var(--text); color: var(--bg); }
+  .fnode.end   { background: var(--text); color: var(--bg); border: 4px solid var(--bg2); outline: 3px solid var(--text); }
+
+  .fnode.action-u { background: var(--actor-bg); border: 1px solid var(--actor); color: var(--text); }
+  .fnode.action-s { background: var(--usecase-bg); border: 1px solid var(--usecase); color: var(--text); }
+  .fnode.action-a { background: var(--admin-bg); border: 1px solid var(--admin); color: var(--text); }
+  .fnode.decision {
+    transform: rotate(45deg);
+    width: 72px; height: 72px;
+    margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    background: #1a1a0a; border: 2px solid var(--note);
+    flex-shrink: 0;
+  }
+  .fnode.decision span { transform: rotate(-45deg); font-size: .62rem; color: var(--note); font-weight: 700; text-align: center; line-height: 1.3; }
+  .fnode.step-tag {
+    background: var(--panel);
+    border: 1px dashed var(--border);
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+  }
+  .fnode.notif { background: #1a1020; border: 1px solid var(--seq); color: var(--seq); }
+
+  .farrow {
+    display: flex; flex-direction: column; align-items: center; margin: 0 auto;
+    color: var(--muted); font-size: .7rem;
+  }
+  .farrow .line { width: 2px; height: 20px; background: var(--muted); }
+  .farrow .tip  { font-size: .85rem; margin-top: -4px; }
+  .farrow.branch { flex-direction: row; gap: 4px; align-items: center; }
+  .fbranch-label { font-size: .6rem; color: var(--note); font-family: 'JetBrains Mono', monospace; }
+
+  /* vertical timeline style for activity */
+  .act-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 680px;
+  }
+  .act-row {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0 16px;
+  }
+  .act-num-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .act-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .act-connector { width: 2px; flex: 1; min-height: 10px; }
+  .act-body { padding-bottom: 12px; padding-top: 6px; }
+  .act-card {
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: .74rem;
+    line-height: 1.5;
+  }
+  /* types */
+  .t-start .act-num { background: var(--text); color: var(--bg); }
+  .t-start .act-connector { background: var(--muted); }
+  .t-user  .act-num { background: var(--actor-bg); border: 1.5px solid var(--actor); color: var(--actor); }
+  .t-user  .act-card { background: var(--actor-bg); border: 1px solid #1e3d5e; color: var(--text); }
+  .t-user  .act-connector { background: var(--actor); opacity: .35; }
+  .t-sys   .act-num { background: var(--usecase-bg); border: 1.5px solid var(--usecase); color: var(--usecase); }
+  .t-sys   .act-card { background: var(--usecase-bg); border: 1px solid #1a3d20; color: var(--text); }
+  .t-sys   .act-connector { background: var(--usecase); opacity: .35; }
+  .t-dec   .act-num { background: #1a1a0a; border: 1.5px solid var(--note); color: var(--note); }
+  .t-dec   .act-card { background: #1a1a0a; border: 1px solid #3a3a0a; color: var(--note); }
+  .t-dec   .act-connector { background: var(--note); opacity: .35; }
+  .t-admin .act-num { background: var(--admin-bg); border: 1.5px solid var(--admin); color: var(--admin); }
+  .t-admin .act-card { background: var(--admin-bg); border: 1px solid #3a200a; color: var(--text); }
+  .t-admin .act-connector { background: var(--admin); opacity: .35; }
+  .t-notif .act-num { background: var(--seq-bg); border: 1.5px solid var(--seq); color: var(--seq); }
+  .t-notif .act-card { background: var(--seq-bg); border: 1px solid #2a1a40; color: var(--text); }
+  .t-notif .act-connector { background: var(--seq); opacity: .35; }
+  .t-end   .act-num { background: var(--text); color: var(--bg); border: 3px solid var(--bg2); outline: 2px solid var(--text); }
+  .t-end   .act-connector { background: transparent; }
+
+  .act-card strong { font-weight: 700; }
+  .act-card .badge {
+    display: inline-block;
+    font-size: .6rem; font-family: 'JetBrains Mono', monospace;
+    padding: 1px 7px; border-radius: 4px; margin-right: 6px;
+    font-weight: 700;
+  }
+  .b-if   { background: #2a2a00; color: var(--note); }
+  .b-else { background: #1a0a20; color: var(--seq); }
+  .b-step { background: #0a1e30; color: var(--actor); }
+  .b-sys  { background: #0a2e10; color: var(--usecase); }
+  .b-adm  { background: #2e1000; color: var(--admin); }
+
+  /* ════════════════════════════════════════
+     SEQUENCE DIAGRAM
+  ════════════════════════════════════════
+  */
+  .seq-wrap { min-width: 780px; }
+  .seq-section { margin-bottom: 36px; }
+  .seq-section-title {
+    font-size: .72rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--seq);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-left: 3px solid var(--seq);
+    padding-left: 10px;
+  }
+
+  .seq-diagram { position: relative; }
+  .seq-participants {
+    display: grid;
+    gap: 0;
+    margin-bottom: 0;
+  }
+  .seq-participant {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0;
+  }
+  .seq-box {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: .68rem;
+    font-weight: 700;
+    text-align: center;
+    min-width: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1.5px solid;
+    position: relative;
+    z-index: 2;
+  }
+  .sb-user { background: var(--actor-bg); border-color: var(--actor); color: var(--actor); }
+  .sb-app  { background: var(--usecase-bg); border-color: var(--usecase); color: var(--usecase); }
+  .sb-db   { background: var(--seq-bg); border-color: var(--seq); color: var(--seq); }
+  .sb-admin{ background: var(--admin-bg); border-color: var(--admin); color: var(--admin); }
+  .sb-email{ background: #1a1000; border-color: var(--note); color: var(--note); }
+
+  .seq-lifeline { width: 2px; background: var(--border); flex: 1; min-height: 8px; }
+
+  .seq-messages { display: flex; flex-direction: column; gap: 0; padding: 4px 0; }
+  .seq-msg {
+    display: grid;
+    align-items: center;
+    font-size: .68rem;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative;
+    min-height: 38px;
+  }
+  .msg-arrow {
+    display: flex; align-items: center;
+    position: relative;
+  }
+  .msg-line {
+    height: 2px;
+    background: var(--actor);
+    flex: 1;
+    position: relative;
+  }
+  .msg-line.return { background: var(--muted); border-top: 2px dashed var(--muted); background: transparent; }
+  .msg-arrowhead { font-size: .85rem; }
+  .msg-label {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: .62rem;
+    color: var(--text2);
+    background: var(--panel);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .msg-label.l-user  { color: var(--actor); }
+  .msg-label.l-sys   { color: var(--usecase); }
+  .msg-label.l-db    { color: var(--seq); }
+  .msg-label.l-admin { color: var(--admin); }
+  .msg-label.l-email { color: var(--note); }
+  .msg-label.l-ret   { color: var(--muted); }
+
+  /* SVG-based sequence */
+  .seq-svg { width: 100%; }
+
+  /* ════════════════════════════════════════
+     CLASS DIAGRAM
+  ════════════════════════════════════════ */
+  .class-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    min-width: 820px;
+  }
+  .class-box {
+    border-radius: var(--r);
+    overflow: hidden;
+    border: 1.5px solid var(--cls);
+    background: var(--cls-bg);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .class-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(244,114,182,.15);
+  }
+  .class-box.cb-main { border-color: var(--actor); background: var(--actor-bg); }
+  .class-box.cb-main:hover { box-shadow: 0 8px 24px rgba(56,189,248,.15); }
+  .class-box.cb-admin { border-color: var(--admin); background: var(--admin-bg); }
+  .class-box.cb-admin:hover { box-shadow: 0 8px 24px rgba(251,146,60,.15); }
+  .class-box.cb-sys { border-color: var(--usecase); background: var(--usecase-bg); }
+  .class-box.cb-sys:hover { box-shadow: 0 8px 24px rgba(74,222,128,.15); }
+  .class-box.cb-seq { border-color: var(--seq); background: var(--seq-bg); }
+  .class-box.cb-seq:hover { box-shadow: 0 8px 24px rgba(167,139,250,.15); }
+
+  .class-header {
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: rgba(0,0,0,.2);
+  }
+  .class-header .icon { font-size: 1rem; }
+  .class-header .cname {
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: -.3px;
+  }
+  .cb-main  .cname { color: var(--actor); }
+  .cb-admin .cname { color: var(--admin); }
+  .class-box .cname { color: var(--cls); }
+  .cb-sys   .cname { color: var(--usecase); }
+  .cb-seq   .cname { color: var(--seq); }
+
+  .class-section { padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .class-section:last-child { border-bottom: none; }
+  .class-section-label {
+    font-size: .58rem;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .class-attr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    color: var(--text2);
+    line-height: 1.9;
+    display: flex; gap: 6px;
+  }
+  .class-attr .vis { color: var(--muted); }
+  .class-attr .aname { color: var(--text); }
+  .class-attr .atype { color: var(--hl); }
+  .class-method {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    color: var(--text2);
+    line-height: 1.9;
+    display: flex; gap: 6px;
+  }
+  .class-method .vis  { color: var(--muted); }
+  .class-method .mname { color: var(--note); }
+  .class-method .mret { color: var(--seq); }
+
+  /* relationships panel */
+  .rel-panel {
+    margin-top: 24px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px 20px;
+  }
+  .rel-panel-title {
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .rel-list { display: flex; flex-direction: column; gap: 8px; }
+  .rel-entry {
+    display: flex; align-items: center; gap: 10px;
+    font-size: .7rem; font-family: 'JetBrains Mono', monospace;
+  }
+  .rel-from { color: var(--actor); font-weight: 700; }
+  .rel-type {
+    padding: 2px 8px; border-radius: 4px;
+    font-size: .6rem; font-weight: 700;
+    white-space: nowrap;
+  }
+  .rt-comp { background: #0c2a3e; color: var(--actor); border: 1px solid var(--actor); }
+  .rt-agg  { background: #0b2e1a; color: var(--usecase); border: 1px solid var(--usecase); }
+  .rt-dep  { background: #2e1a0a; color: var(--admin); border: 1px solid var(--admin); }
+  .rt-assoc{ background: #1a1030; color: var(--seq); border: 1px solid var(--seq); }
+  .rel-to  { color: var(--cls); font-weight: 700; }
+  .rel-mult{ color: var(--text2); }
+  .rel-desc{ color: var(--muted); }
+
+  /* ── FOOTER ── */
+  .diagram-footer {
+    margin-top: 8px; padding: 8px 14px;
+    font-size: .62rem; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    text-align: right;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* enum chip */
+  .enum-chip {
+    display: inline-block;
+    font-size: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    background: #1a0a20;
+    color: var(--seq);
+    border: 1px solid var(--seq);
+    border-radius: 4px;
+    padding: 0 5px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>UML Diagram — <span>Yayasan Darul Furqan Pariaman</span></h1>
+  <p>// Sistem Informasi Sekolah &amp; PPDB (Penerimaan Peserta Didik Baru)</p>
+  <div class="tag-row">
+    <span class="tag tag-a">Actors</span>
+    <span class="tag tag-u">Use Cases</span>
+    <span class="tag tag-o">Admin Features</span>
+    <span class="tag tag-s">Sequence Flow</span>
+    <span class="tag tag-c">Class Model</span>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="usecase" onclick="showTab('usecase')">📌 Use Case</button>
+  <button class="tab-btn" data-tab="activity"  onclick="showTab('activity')">⚙️ Activity</button>
+  <button class="tab-btn" data-tab="sequence"  onclick="showTab('sequence')">↔️ Sequence</button>
+  <button class="tab-btn" data-tab="class"     onclick="showTab('class')">🗂 Class</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 1: USE CASE
+══════════════════════════════════════════════ -->
+<div id="tab-usecase" class="tab-content active">
+  <div class="sec-title" style="color:var(--usecase)">Use Case Diagram</div>
+  <div class="sec-sub">// Actors, Use Cases, and Relationships — Sistem PPDB &amp; Profil Sekolah</div>
+
+  <div class="diagram-scroll">
+    <div class="uc-grid">
+
+      <!-- LEFT ACTORS: Guest + Calon Siswa/Ortu -->
+      <div class="actor-col">
+        <div class="actor-box">
+          <div class="actor-icon">👤</div>
+          <div class="name">Guest</div>
+          <div class="sub">Pengunjung Umum</div>
+        </div>
+        <div class="actor-box">
+          <div class="actor-icon">🎓</div>
+          <div class="name">Calon Siswa</div>
+          <div class="sub">Pendaftar PPDB</div>
+        </div>
+        <div class="actor-box">
+          <div class="actor-icon">👨‍👩‍👧</div>
+          <div class="name">Orang Tua /&nbsp;Wali</div>
+          <div class="sub">Co-Applicant</div>
+        </div>
+      </div>
+
+      <!-- CENTER USE CASES -->
+      <div class="uc-center">
+
+        <!-- Guest Group -->
+        <div class="uc-group">
+          <div class="uc-group-title g-guest">👤 Guest — Public Access</div>
+          <div class="uc-items">
+            <div class="uc-item g"><span class="dot"></span>View School Profile</div>
+            <div class="uc-item g"><span class="dot"></span>View News &amp; Announcements</div>
+            <div class="uc-item g"><span class="dot"></span>View Contact Info</div>
+            <div class="uc-item g"><span class="dot"></span>Register Account</div>
+          </div>
+        </div>
+
+        <!-- Siswa/Ortu Group -->
+        <div class="uc-group">
+          <div class="uc-group-title g-siswa">🎓 Calon Siswa / Orang Tua — PPDB</div>
+          <div class="uc-items">
+            <div class="uc-item u"><span class="dot"></span>Login</div>
+            <div class="uc-item u"><span class="dot"></span>Fill Student Data Form <span class="uc-note">«include»</span></div>
+            <div class="uc-item u"><span class="dot"></span>Fill Parent Data Form <span class="uc-note">«include»</span></div>
+            <div class="uc-item u"><span class="dot"></span>Upload Documents <span class="uc-note">«include»</span></div>
+            <div class="uc-item u"><span class="dot"></span>Submit PPDB Application <span class="uc-note">«include» all above</span></div>
+            <div class="uc-item u"><span class="dot"></span>View Application Status</div>
+            <div class="uc-item u"><span class="dot"></span>Receive Notification</div>
+          </div>
+        </div>
+
+        <!-- Admin Group -->
+        <div class="uc-group">
+          <div class="uc-group-title g-admin">🛡 Admin PPDB</div>
+          <div class="uc-items">
+            <div class="uc-item a"><span class="dot"></span>Login (Admin)</div>
+            <div class="uc-item a"><span class="dot"></span>View Applicant List</div>
+            <div class="uc-item a"><span class="dot"></span>Verify Documents <span class="uc-note">«extend» Set Status</span></div>
+            <div class="uc-item a"><span class="dot"></span>Set Application Status <span class="uc-note">«include» Send Notification</span></div>
+            <div class="uc-item a"><span class="dot"></span>Send Notification</div>
+          </div>
+        </div>
+
+        <!-- Super Admin Group -->
+        <div class="uc-group">
+          <div class="uc-group-title g-super">⚙️ Super Admin</div>
+          <div class="uc-items">
+            <div class="uc-item s"><span class="dot"></span>Manage School Profile</div>
+            <div class="uc-item s"><span class="dot"></span>Manage News (CRUD)</div>
+            <div class="uc-item s"><span class="dot"></span>Manage PPDB Period (Open/Close)</div>
+            <div class="uc-item s"><span class="dot"></span>Manage Admin Accounts</div>
+            <div class="uc-item s"><span class="dot"></span>View Reports &amp; Statistics</div>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="rel-legend">
+          <div class="rel-item">
+            <div class="rel-line inc"></div>
+            <span style="color:var(--usecase); font-size:.7rem">«include» — mandatory sub-flow</span>
+          </div>
+          <div class="rel-item">
+            <div class="rel-line ext"></div>
+            <span style="color:var(--admin); font-size:.7rem">«extend» — conditional extension</span>
+          </div>
+          <div class="rel-item">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--actor)"></div>
+            <span style="color:var(--actor); font-size:.7rem">Actor</span>
+          </div>
+          <div class="rel-item">
+            <div style="width:24px;height:14px;border-radius:10px;background:var(--usecase-bg);border:1px solid var(--usecase)"></div>
+            <span style="color:var(--usecase); font-size:.7rem">Use Case</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT ACTORS: Admin + Super Admin -->
+      <div class="actor-col">
+        <div class="actor-box admin-actor">
+          <div class="actor-icon">🛡</div>
+          <div class="name">Admin PPDB</div>
+          <div class="sub">Verifikator</div>
+        </div>
+        <div class="actor-box admin-actor">
+          <div class="actor-icon">⚙️</div>
+          <div class="name">Super Admin</div>
+          <div class="sub">System Manager</div>
+        </div>
+        <div class="actor-box" style="background:#1a1000;border-color:var(--note)">
+          <div class="actor-icon" style="background:var(--note)">📧</div>
+          <div class="name" style="color:var(--note)">Email Service</div>
+          <div class="sub">Notifikasi Otomatis</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="diagram-footer">UML Use Case — Yayasan Darul Furqan Pariaman // PPDB System</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 2: ACTIVITY
+══════════════════════════════════════════════ -->
+<div id="tab-activity" class="tab-content">
+  <div class="sec-title" style="color:var(--actor)">Activity Diagram — PPDB Flow</div>
+  <div class="sec-sub">// Step-by-step process from user access to admin decision & notification</div>
+
+  <div class="diagram-scroll">
+    <div class="act-timeline">
+
+      <!-- START -->
+      <div class="act-row t-start">
+        <div class="act-num-col">
+          <div class="act-num">●</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card" style="background:var(--panel);border:1px solid var(--border);color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">
+            START — User mengakses website Yayasan Darul Furqan Pariaman
+          </div>
+        </div>
+      </div>
+
+      <!-- 1 -->
+      <div class="act-row t-user">
+        <div class="act-num-col">
+          <div class="act-num">1</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">User mengklik tombol <strong>"Daftar PPDB"</strong> di Landing Page</div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="act-row t-dec">
+        <div class="act-num-col">
+          <div class="act-num">?</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-if">IF</span> Sudah punya akun → <strong>Login</strong> dengan email &amp; password<br>
+            <span class="badge b-else">ELSE</span> → <strong>Register</strong> akun baru (nama, email, password, nomor HP)
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="act-row t-sys">
+        <div class="act-num-col">
+          <div class="act-num">3</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-sys">SYSTEM</span>
+            <span class="badge b-if">IF</span> Register → Sistem kirim <strong>email verifikasi</strong> ke akun baru<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User klik link konfirmasi di email
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="act-row t-user">
+        <div class="act-num-col">
+          <div class="act-num">4</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">User masuk ke <strong>Applicant Dashboard</strong> — klik "Mulai Pendaftaran"</div>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="act-row t-user">
+        <div class="act-num-col">
+          <div class="act-num">5</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-step">STEP 1</span> <strong>Data Siswa</strong><br>
+            Isi: nama lengkap, TTL, jenis kelamin, alamat, agama, asal sekolah, NISN
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="act-row t-user">
+        <div class="act-num-col">
+          <div class="act-num">6</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-step">STEP 2</span> <strong>Data Orang Tua</strong><br>
+            Isi: nama ayah/ibu/wali, pekerjaan, penghasilan, nomor HP, alamat
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="act-row t-user">
+        <div class="act-num-col">
+          <div class="act-num">7</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-step">STEP 3</span> <strong>Upload Dokumen</strong><br>
+            KK · Akta Kelahiran · Ijazah/SKL · Pas Foto · Rapor (jika diperlukan)
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="act-row t-dec">
+        <div class="act-num-col">
+          <div class="act-num">?</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-if">IF</span> Format/ukuran file invalid → Sistem tampilkan error → User <strong>re-upload</strong><br>
+            <span class="badge b-else">ELSE</span> File valid → Lanjut ke Step berikutnya
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="act-row t-user">
+        <div class="act-num-col">
+          <div class="act-num">8</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-step">STEP 4</span> <strong>Review &amp; Submit</strong><br>
+            Sistem tampilkan ringkasan semua data — User review
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="act-row t-dec">
+        <div class="act-num-col">
+          <div class="act-num">?</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-if">IF</span> User ingin edit → Kembali ke step terkait<br>
+            <span class="badge b-else">ELSE</span> User klik <strong>"Kirim Pendaftaran"</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="act-row t-sys">
+        <div class="act-num-col">
+          <div class="act-num">10</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-sys">SYSTEM</span>
+            Form dikunci (read-only) · Timestamp submission dicatat · Status → <strong>Pending</strong><br>
+            Konfirmasi ditampilkan + email konfirmasi dikirim
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN SIDE -->
+      <div class="act-row t-admin">
+        <div class="act-num-col">
+          <div class="act-num">11</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-adm">ADMIN</span>
+            Admin login ke dashboard → melihat daftar pendaftar baru/pending
+          </div>
+        </div>
+      </div>
+
+      <div class="act-row t-admin">
+        <div class="act-num-col">
+          <div class="act-num">12</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-adm">ADMIN</span>
+            Admin buka detail pendaftar → review dokumen satu per satu
+          </div>
+        </div>
+      </div>
+
+      <div class="act-row t-dec">
+        <div class="act-num-col">
+          <div class="act-num">?</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-if">IF</span> Dokumen tidak valid/lengkap → Admin flag dengan catatan → Notifikasi ke pendaftar untuk re-upload<br>
+            <span class="badge b-else">ELSE</span> Semua dokumen valid → Admin tandai <strong>"Verified"</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="act-row t-admin">
+        <div class="act-num-col">
+          <div class="act-num">13</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card">
+            <span class="badge b-adm">ADMIN</span>
+            Admin set status akhir: <strong style="color:var(--usecase)">✓ Diterima</strong> atau <strong style="color:#f87171">✗ Tidak Diterima</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 -->
+      <div class="act-row t-notif">
+        <div class="act-num-col">
+          <div class="act-num">14</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card" style="border-color:var(--seq)">
+            Sistem kirim <strong>notifikasi final</strong> ke pendaftar (email + dashboard)<br>
+            Pendaftar login → lihat status <strong>Diterima ✅</strong> / <strong>Tidak Diterima ❌</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- END -->
+      <div class="act-row t-end">
+        <div class="act-num-col">
+          <div class="act-num">⬤</div>
+          <div class="act-connector"></div>
+        </div>
+        <div class="act-body">
+          <div class="act-card" style="background:var(--panel);border:1px solid var(--border);color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">
+            END — Proses PPDB selesai
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="diagram-footer">UML Activity — PPDB Flow // Yayasan Darul Furqan Pariaman</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 3: SEQUENCE
+══════════════════════════════════════════════ -->
+<div id="tab-sequence" class="tab-content">
+  <div class="sec-title" style="color:var(--seq)">Sequence Diagram</div>
+  <div class="sec-sub">// Message flows: Registration/Login · PPDB Submission · Admin Verification</div>
+
+  <div class="diagram-scroll">
+    <div class="seq-wrap">
+
+      <!-- SEQ 1: Registration & Login -->
+      <div class="seq-section">
+        <div class="seq-section-title">3.1 — Registration &amp; Login</div>
+        <svg viewBox="0 0 760 380" class="seq-svg" style="font-family:'JetBrains Mono',monospace">
+          <!-- Lifelines -->
+          <defs>
+            <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#38bdf8"/>
+            </marker>
+            <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#4ade80"/>
+            </marker>
+            <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#a78bfa"/>
+            </marker>
+            <marker id="arrowGray" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#4a5568"/>
+            </marker>
+            <marker id="arrowYellow" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#facc15"/>
+            </marker>
+          </defs>
+
+          <!-- Participant boxes -->
+          <!-- Calon Siswa x=80 -->
+          <rect x="20" y="10" width="120" height="36" rx="6" fill="#0c2a3e" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="80" y="32" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="700">Calon Siswa</text>
+          <!-- Web App x=230 -->
+          <rect x="170" y="10" width="120" height="36" rx="6" fill="#0b2e1a" stroke="#4ade80" stroke-width="1.5"/>
+          <text x="230" y="32" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="700">Web App</text>
+          <!-- Database x=400 -->
+          <rect x="340" y="10" width="120" height="36" rx="6" fill="#1a1030" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="400" y="32" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="700">Database</text>
+          <!-- Email Service x=570 -->
+          <rect x="510" y="10" width="130" height="36" rx="6" fill="#1a1000" stroke="#facc15" stroke-width="1.5"/>
+          <text x="575" y="32" text-anchor="middle" fill="#facc15" font-size="11" font-weight="700">Email Service</text>
+
+          <!-- Lifelines -->
+          <line x1="80"  y1="46" x2="80"  y2="370" stroke="#1e3d5e" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="230" y1="46" x2="230" y2="370" stroke="#1a3d20" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="400" y1="46" x2="400" y2="370" stroke="#2a1a40" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="575" y1="46" x2="575" y2="370" stroke="#2a1a00" stroke-width="2" stroke-dasharray="6,4"/>
+
+          <!-- Messages -->
+          <!-- 1. Register -->
+          <line x1="80" y1="80" x2="222" y2="80" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+          <text x="150" y="74" text-anchor="middle" fill="#38bdf8" font-size="10">Register(email, pwd, phone)</text>
+
+          <!-- 2. Validate -->
+          <line x1="230" y1="105" x2="392" y2="105" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+          <text x="310" y="99" text-anchor="middle" fill="#4ade80" font-size="10">Validate(email_exists?)</text>
+
+          <!-- 3. DB return -->
+          <line x1="400" y1="130" x2="238" y2="130" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGray)"/>
+          <text x="310" y="124" text-anchor="middle" fill="#4a5568" font-size="10">← not_duplicate</text>
+
+          <!-- 4. Save User -->
+          <line x1="230" y1="155" x2="392" y2="155" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+          <text x="310" y="149" text-anchor="middle" fill="#4ade80" font-size="10">SaveUser(data)</text>
+
+          <!-- 5. Email -->
+          <line x1="400" y1="180" x2="567" y2="180" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+          <text x="485" y="174" text-anchor="middle" fill="#a78bfa" font-size="10">SendVerifyEmail(token)</text>
+
+          <!-- 6. Prompt -->
+          <line x1="230" y1="205" x2="88" y2="205" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGray)"/>
+          <text x="155" y="199" text-anchor="middle" fill="#4a5568" font-size="10">← PromptEmailVerify</text>
+
+          <!-- 7. Click link -->
+          <line x1="80" y1="230" x2="567" y2="230" stroke="#facc15" stroke-width="1.5" marker-end="url(#arrowYellow)"/>
+          <text x="325" y="224" text-anchor="middle" fill="#facc15" font-size="10">ClickVerifyLink(token)</text>
+
+          <!-- 8. Verify -->
+          <line x1="575" y1="255" x2="408" y2="255" stroke="#facc15" stroke-width="1.5" marker-end="url(#arrowYellow)"/>
+          <text x="490" y="249" text-anchor="middle" fill="#facc15" font-size="10">VerifyToken()</text>
+
+          <!-- 9. Valid -->
+          <line x1="400" y1="278" x2="238" y2="278" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGray)"/>
+          <text x="310" y="272" text-anchor="middle" fill="#4a5568" font-size="10">← token_valid</text>
+
+          <!-- 10. Login -->
+          <line x1="80" y1="302" x2="222" y2="302" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+          <text x="150" y="296" text-anchor="middle" fill="#38bdf8" font-size="10">Login(email, pwd)</text>
+
+          <!-- 11. Auth -->
+          <line x1="230" y1="328" x2="392" y2="328" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+          <text x="310" y="322" text-anchor="middle" fill="#4ade80" font-size="10">CheckCredentials()</text>
+
+          <!-- 12. Token -->
+          <line x1="400" y1="352" x2="88" y2="352" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGray)"/>
+          <text x="240" y="346" text-anchor="middle" fill="#4a5568" font-size="10">← AuthToken + Dashboard</text>
+        </svg>
+      </div>
+
+      <!-- SEQ 2: PPDB Submission -->
+      <div class="seq-section">
+        <div class="seq-section-title">3.2 — PPDB Form Submission</div>
+        <svg viewBox="0 0 760 380" class="seq-svg" style="font-family:'JetBrains Mono',monospace">
+          <defs>
+            <marker id="ab2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#38bdf8"/></marker>
+            <marker id="ag2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#4ade80"/></marker>
+            <marker id="ap2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#a78bfa"/></marker>
+            <marker id="agr2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#4a5568"/></marker>
+            <marker id="ao2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#fb923c"/></marker>
+          </defs>
+          <!-- Boxes -->
+          <rect x="20"  y="10" width="120" height="36" rx="6" fill="#0c2a3e" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="80"  y="32" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="700">Calon Siswa</text>
+          <rect x="170" y="10" width="120" height="36" rx="6" fill="#0b2e1a" stroke="#4ade80" stroke-width="1.5"/>
+          <text x="230" y="32" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="700">Web App</text>
+          <rect x="340" y="10" width="120" height="36" rx="6" fill="#1a1030" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="400" y="32" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="700">Database</text>
+          <rect x="510" y="10" width="120" height="36" rx="6" fill="#2e1a0a" stroke="#fb923c" stroke-width="1.5"/>
+          <text x="570" y="32" text-anchor="middle" fill="#fb923c" font-size="11" font-weight="700">Admin</text>
+          <!-- Lifelines -->
+          <line x1="80"  y1="46" x2="80"  y2="370" stroke="#1e3d5e" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="230" y1="46" x2="230" y2="370" stroke="#1a3d20" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="400" y1="46" x2="400" y2="370" stroke="#2a1a40" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="570" y1="46" x2="570" y2="370" stroke="#3a200a" stroke-width="2" stroke-dasharray="6,4"/>
+          <!-- Messages -->
+          <line x1="80" y1="80" x2="222" y2="80" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ab2)"/>
+          <text x="150" y="74" text-anchor="middle" fill="#38bdf8" font-size="10">OpenForm()</text>
+          <line x1="230" y1="105" x2="392" y2="105" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag2)"/>
+          <text x="310" y="99" text-anchor="middle" fill="#4ade80" font-size="10">LoadDraft(userId)</text>
+          <line x1="400" y1="130" x2="238" y2="130" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#agr2)"/>
+          <text x="310" y="124" text-anchor="middle" fill="#4a5568" font-size="10">← draftData</text>
+          <line x1="230" y1="152" x2="88"  y2="152" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#agr2)"/>
+          <text x="155" y="146" text-anchor="middle" fill="#4a5568" font-size="10">← MultiStepForm</text>
+          <!-- Step 1 -->
+          <line x1="80" y1="176" x2="222" y2="176" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ab2)"/>
+          <text x="150" y="170" text-anchor="middle" fill="#38bdf8" font-size="10">SubmitStep1(studentData)</text>
+          <line x1="230" y1="200" x2="392" y2="200" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag2)"/>
+          <text x="310" y="194" text-anchor="middle" fill="#4ade80" font-size="10">SavePartial(step1)</text>
+          <!-- Step 2 -->
+          <line x1="80" y1="224" x2="222" y2="224" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ab2)"/>
+          <text x="150" y="218" text-anchor="middle" fill="#38bdf8" font-size="10">SubmitStep2(parentData)</text>
+          <line x1="230" y1="248" x2="392" y2="248" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag2)"/>
+          <text x="310" y="242" text-anchor="middle" fill="#4ade80" font-size="10">SavePartial(step2)</text>
+          <!-- Step 3 Upload -->
+          <line x1="80" y1="272" x2="222" y2="272" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ab2)"/>
+          <text x="150" y="266" text-anchor="middle" fill="#38bdf8" font-size="10">UploadDocs(files[])</text>
+          <line x1="230" y1="296" x2="392" y2="296" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag2)"/>
+          <text x="310" y="290" text-anchor="middle" fill="#4ade80" font-size="10">StoreFiles() → pending</text>
+          <!-- Final Submit -->
+          <line x1="80" y1="320" x2="222" y2="320" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ab2)"/>
+          <text x="150" y="314" text-anchor="middle" fill="#38bdf8" font-size="10">FinalSubmit()</text>
+          <line x1="230" y1="344" x2="392" y2="344" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag2)"/>
+          <text x="310" y="338" text-anchor="middle" fill="#4ade80" font-size="10">SetStatus(pending)</text>
+          <line x1="400" y1="364" x2="562" y2="364" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ao2)"/>
+          <text x="485" y="358" text-anchor="middle" fill="#fb923c" font-size="10">NotifyAdmin(newApp)</text>
+        </svg>
+      </div>
+
+      <!-- SEQ 3: Admin Verification -->
+      <div class="seq-section">
+        <div class="seq-section-title">3.3 — Admin Verification</div>
+        <svg viewBox="0 0 760 360" class="seq-svg" style="font-family:'JetBrains Mono',monospace">
+          <defs>
+            <marker id="ab3" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#fb923c"/></marker>
+            <marker id="ag3" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#4ade80"/></marker>
+            <marker id="ap3" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#a78bfa"/></marker>
+            <marker id="agr3" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#4a5568"/></marker>
+            <marker id="abl3" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#38bdf8"/></marker>
+          </defs>
+          <!-- Boxes -->
+          <rect x="20"  y="10" width="110" height="36" rx="6" fill="#2e1a0a" stroke="#fb923c" stroke-width="1.5"/>
+          <text x="75"  y="32" text-anchor="middle" fill="#fb923c" font-size="11" font-weight="700">Admin PPDB</text>
+          <rect x="165" y="10" width="120" height="36" rx="6" fill="#0b2e1a" stroke="#4ade80" stroke-width="1.5"/>
+          <text x="225" y="32" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="700">Web App</text>
+          <rect x="330" y="10" width="120" height="36" rx="6" fill="#1a1030" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="390" y="32" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="700">Database</text>
+          <rect x="500" y="10" width="130" height="36" rx="6" fill="#0c2a3e" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="565" y="32" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="700">Calon Siswa</text>
+          <!-- Lifelines -->
+          <line x1="75"  y1="46" x2="75"  y2="350" stroke="#3a200a" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="225" y1="46" x2="225" y2="350" stroke="#1a3d20" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="390" y1="46" x2="390" y2="350" stroke="#2a1a40" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="565" y1="46" x2="565" y2="350" stroke="#1e3d5e" stroke-width="2" stroke-dasharray="6,4"/>
+          <!-- Messages -->
+          <line x1="75" y1="80" x2="217" y2="80" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ab3)"/>
+          <text x="145" y="74" text-anchor="middle" fill="#fb923c" font-size="10">Login(admin)</text>
+          <line x1="225" y1="104" x2="83"  y2="104" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#agr3)"/>
+          <text x="150" y="98" text-anchor="middle" fill="#4a5568" font-size="10">← Dashboard</text>
+          <line x1="75"  y1="128" x2="217" y2="128" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ab3)"/>
+          <text x="145" y="122" text-anchor="middle" fill="#fb923c" font-size="10">ViewApplicantList()</text>
+          <line x1="225" y1="152" x2="382" y2="152" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag3)"/>
+          <text x="303" y="146" text-anchor="middle" fill="#4ade80" font-size="10">FetchApplications()</text>
+          <line x1="390" y1="176" x2="233" y2="176" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#agr3)"/>
+          <text x="310" y="170" text-anchor="middle" fill="#4a5568" font-size="10">← appList[]</text>
+          <line x1="225" y1="200" x2="83"  y2="200" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#agr3)"/>
+          <text x="150" y="194" text-anchor="middle" fill="#4a5568" font-size="10">← RenderTable</text>
+          <line x1="75"  y1="224" x2="217" y2="224" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ab3)"/>
+          <text x="145" y="218" text-anchor="middle" fill="#fb923c" font-size="10">OpenDetail(appId)</text>
+          <line x1="225" y1="248" x2="382" y2="248" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag3)"/>
+          <text x="303" y="242" text-anchor="middle" fill="#4ade80" font-size="10">FetchDocs(appId)</text>
+          <line x1="390" y1="272" x2="233" y2="272" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#agr3)"/>
+          <text x="303" y="266" text-anchor="middle" fill="#4a5568" font-size="10">← docs[] + studentData</text>
+          <line x1="75" y1="296" x2="217" y2="296" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ab3)"/>
+          <text x="145" y="290" text-anchor="middle" fill="#fb923c" font-size="10">SetDecision(accepted|rejected)</text>
+          <line x1="225" y1="320" x2="382" y2="320" stroke="#4ade80" stroke-width="1.5" marker-end="url(#ag3)"/>
+          <text x="303" y="314" text-anchor="middle" fill="#4ade80" font-size="10">SaveDecision(status)</text>
+          <line x1="390" y1="344" x2="557" y2="344" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#abl3)"/>
+          <text x="475" y="338" text-anchor="middle" fill="#38bdf8" font-size="10">NotifyApplicant(result)</text>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+  <div class="diagram-footer">UML Sequence — Registration · PPDB Submission · Admin Verification</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 4: CLASS
+══════════════════════════════════════════════ -->
+<div id="tab-class" class="tab-content">
+  <div class="sec-title" style="color:var(--cls)">Class Diagram</div>
+  <div class="sec-sub">// Classes, attributes, methods, and relationships — Domain Model</div>
+
+  <div class="diagram-scroll">
+    <div class="class-grid">
+
+      <!-- User -->
+      <div class="class-box cb-main">
+        <div class="class-header">
+          <span class="icon">👤</span>
+          <span class="cname">User</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">name</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">email</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">password</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">role</span><span class="atype">: enum</span><span class="enum-chip">applicant|admin|superadmin</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">isVerified</span><span class="atype">: bool</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">createdAt</span><span class="atype">: datetime</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">login()</span><span class="mret">: Token</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">register()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">verifyEmail(token)</span><span class="mret">: bool</span></div>
+        </div>
+      </div>
+
+      <!-- PPDBApplication -->
+      <div class="class-box cb-main" style="border-color:var(--usecase);background:var(--usecase-bg)">
+        <div class="class-header">
+          <span class="icon">📋</span>
+          <span class="cname" style="color:var(--usecase)">PPDBApplication</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">userId</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">periodId</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">submittedAt</span><span class="atype">: datetime</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">status</span><span class="atype">: enum</span><span class="enum-chip" style="color:var(--usecase);border-color:var(--usecase)">draft|pending|verified|accepted|rejected</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">adminNote</span><span class="atype">: string</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">submit()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">updateStatus(s)</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">getStatusLabel()</span><span class="mret">: string</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">lock()</span><span class="mret">: void</span></div>
+        </div>
+      </div>
+
+      <!-- Document -->
+      <div class="class-box">
+        <div class="class-header">
+          <span class="icon">📁</span>
+          <span class="cname">Document</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">applicationId</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">type</span><span class="atype">: enum</span><span class="enum-chip">KK|akta|ijazah|foto|rapor</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">filePath</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">fileSize</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">status</span><span class="atype">: enum</span><span class="enum-chip">pending|approved|rejected</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">uploadedAt</span><span class="atype">: datetime</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">upload(file)</span><span class="mret">: bool</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">validateFormat()</span><span class="mret">: bool</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">approve()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">reject(note)</span><span class="mret">: void</span></div>
+        </div>
+      </div>
+
+      <!-- StudentData -->
+      <div class="class-box cb-seq">
+        <div class="class-header">
+          <span class="icon">🎓</span>
+          <span class="cname" style="color:var(--seq)">StudentData</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">applicationId</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">fullName</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">birthDate</span><span class="atype">: date</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">gender</span><span class="atype">: enum</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">address</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">religion</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">prevSchool</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">nisn</span><span class="atype">: string</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">validate()</span><span class="mret">: bool</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">save()</span><span class="mret">: void</span></div>
+        </div>
+      </div>
+
+      <!-- ParentData -->
+      <div class="class-box cb-seq">
+        <div class="class-header">
+          <span class="icon">👨‍👩‍👧</span>
+          <span class="cname" style="color:var(--seq)">ParentData</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">applicationId</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">fatherName</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">motherName</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">guardianName</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">job</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">income</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">phone</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">address</span><span class="atype">: string</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">validate()</span><span class="mret">: bool</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">save()</span><span class="mret">: void</span></div>
+        </div>
+      </div>
+
+      <!-- Notification -->
+      <div class="class-box">
+        <div class="class-header">
+          <span class="icon">🔔</span>
+          <span class="cname">Notification</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">userId</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">message</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">type</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">isRead</span><span class="atype">: bool</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">createdAt</span><span class="atype">: datetime</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">send()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">markRead()</span><span class="mret">: void</span></div>
+        </div>
+      </div>
+
+      <!-- SchoolProfile -->
+      <div class="class-box cb-admin">
+        <div class="class-header">
+          <span class="icon">🏫</span>
+          <span class="cname">SchoolProfile</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">name</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">vision</span><span class="atype">: text</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">mission</span><span class="atype">: text</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">address</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">phone</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">email</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">logo</span><span class="atype">: string</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">update(data)</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">getProfile()</span><span class="mret">: SchoolProfile</span></div>
+        </div>
+      </div>
+
+      <!-- News -->
+      <div class="class-box cb-admin">
+        <div class="class-header">
+          <span class="icon">📰</span>
+          <span class="cname">News</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">title</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">body</span><span class="atype">: text</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">thumbnail</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">isPublished</span><span class="atype">: bool</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">authorId</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">publishedAt</span><span class="atype">: datetime</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">publish()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">unpublish()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">delete()</span><span class="mret">: void</span></div>
+        </div>
+      </div>
+
+      <!-- PPDBPeriod -->
+      <div class="class-box cb-sys">
+        <div class="class-header">
+          <span class="icon">📅</span>
+          <span class="cname">PPDBPeriod</span>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Attributes</div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">: int</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">year</span><span class="atype">: string</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">startDate</span><span class="atype">: date</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">endDate</span><span class="atype">: date</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">isActive</span><span class="atype">: bool</span></div>
+          <div class="class-attr"><span class="vis">-</span><span class="aname">quota</span><span class="atype">: int</span></div>
+        </div>
+        <div class="class-section">
+          <div class="class-section-label">Methods</div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">open()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">close()</span><span class="mret">: void</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">isOpen()</span><span class="mret">: bool</span></div>
+          <div class="class-method"><span class="vis">+</span><span class="mname">getStats()</span><span class="mret">: object</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Relationships -->
+    <div class="rel-panel">
+      <div class="rel-panel-title">🔗 Class Relationships</div>
+      <div class="rel-list">
+        <div class="rel-entry">
+          <span class="rel-from">User</span>
+          <span class="rel-type rt-comp">1 → 0..1</span>
+          <span class="rel-to">PPDBApplication</span>
+          <span class="rel-desc">— User memiliki satu application PPDB</span>
+        </div>
+        <div class="rel-entry">
+          <span class="rel-from">PPDBApplication</span>
+          <span class="rel-type rt-comp">1 → 1</span>
+          <span class="rel-to">StudentData</span>
+          <span class="rel-desc">— Komposisi: data siswa bagian dari application</span>
+        </div>
+        <div class="rel-entry">
+          <span class="rel-from">PPDBApplication</span>
+          <span class="rel-type rt-comp">1 → 1</span>
+          <span class="rel-to">ParentData</span>
+          <span class="rel-desc">— Komposisi: data ortu bagian dari application</span>
+        </div>
+        <div class="rel-entry">
+          <span class="rel-from">PPDBApplication</span>
+          <span class="rel-type rt-agg">1 → many</span>
+          <span class="rel-to">Document</span>
+          <span class="rel-desc">— Agregasi: satu application memiliki banyak dokumen</span>
+        </div>
+        <div class="rel-entry">
+          <span class="rel-from">PPDBApplication</span>
+          <span class="rel-type rt-dep">triggers →</span>
+          <span class="rel-to">Notification</span>
+          <span class="rel-desc">— Perubahan status memicu pengiriman notifikasi</span>
+        </div>
+        <div class="rel-entry">
+          <span class="rel-from">User</span>
+          <span class="rel-type rt-assoc">receives</span>
+          <span class="rel-to">Notification</span>
+          <span class="rel-desc">— Notifikasi diterima oleh user terkait</span>
+        </div>
+        <div class="rel-entry">
+          <span class="rel-from">PPDBPeriod</span>
+          <span class="rel-type rt-agg">1 → many</span>
+          <span class="rel-to">PPDBApplication</span>
+          <span class="rel-desc">— Satu periode memiliki banyak pendaftaran</span>
+        </div>
+        <div class="rel-entry">
+          <span class="rel-from">User (superadmin)</span>
+          <span class="rel-type rt-dep">manages →</span>
+          <span class="rel-to">SchoolProfile · News · PPDBPeriod</span>
+          <span class="rel-desc">— Super admin mengelola konten statis</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="diagram-footer">UML Class Diagram — Domain Model // Yayasan Darul Furqan Pariaman</div>
+</div>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelector('[data-tab="' + name + '"]').classList.add('active');
+  }
+</script>
+</body>
+</html>
