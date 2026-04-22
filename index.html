@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UML Diagram — Sistem Informasi Website Sekolah Yayasan Darul Furqan Pariaman</title>
+<style>
+  /* ── RESET & BASE ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: 'Times New Roman', Times, Georgia, serif;
+    font-size: 13pt;
+    line-height: 1.6;
+  }
+
+  /* ── PAGE WRAPPER ── */
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 48px 60px;
+  }
+
+  /* ── COVER / HEADER ── */
+  .cover {
+    text-align: center;
+    border: 2px solid #1a1a1a;
+    padding: 36px 40px 32px;
+    margin-bottom: 36px;
+  }
+  .cover-logo {
+    font-size: 11pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 22pt;
+    font-weight: bold;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+  .cover h2 {
+    font-size: 15pt;
+    font-weight: normal;
+    font-style: italic;
+    color: #333;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+  }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 6px 0;
+    text-align: left;
+    max-width: 420px;
+    margin: 0 auto;
+    font-size: 11pt;
+  }
+  .cover-meta .label { font-weight: bold; color: #333; }
+  .cover-meta .value { color: #1a1a1a; }
+  .cover-meta .sep   { color: #666; padding: 0 6px; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid #bbb;
+    margin: 28px 0;
+  }
+  .divider-thick {
+    border: none;
+    border-top: 2px solid #1a1a1a;
+    margin: 28px 0;
+  }
+
+  /* ── TAB NAVIGATION ── */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #1a1a1a;
+    margin-bottom: 32px;
+  }
+  .tab-btn {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11pt;
+    font-weight: bold;
+    padding: 9px 22px;
+    background: #f0f0f0;
+    border: 1px solid #aaa;
+    border-bottom: none;
+    cursor: pointer;
+    color: #444;
+    margin-right: 3px;
+    transition: background .15s, color .15s;
+    letter-spacing: .3px;
+  }
+  .tab-btn:hover { background: #e0e0e0; color: #1a1a1a; }
+  .tab-btn.active {
+    background: #ffffff;
+    color: #1a1a1a;
+    border-color: #1a1a1a;
+    border-bottom: 2px solid #ffffff;
+    margin-bottom: -2px;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── SECTION HEADING ── */
+  .section-heading {
+    font-size: 15pt;
+    font-weight: bold;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 6px;
+  }
+  .section-number {
+    font-size: 11pt;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+
+  /* ── DIAGRAM BOX ── */
+  .diagram-box {
+    border: 1.5px solid #1a1a1a;
+    margin: 16px 0 12px;
+    padding: 24px 20px;
+    background: #fff;
+  }
+  .diagram-title {
+    font-size: 11pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  .diagram-caption {
+    font-size: 10pt;
+    font-style: italic;
+    color: #444;
+    text-align: center;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    line-height: 1.5;
+  }
+
+  /* ════════════════════════════════
+     USE CASE
+  ════════════════════════════════ */
+  .uc-layout {
+    display: grid;
+    grid-template-columns: 148px 1fr 148px;
+    gap: 16px;
+    align-items: start;
+    min-width: 680px;
+  }
+  .actor-col { display: flex; flex-direction: column; gap: 12px; }
+  .actor-box {
+    border: 1.5px solid #555;
+    border-radius: 2px;
+    padding: 10px 8px;
+    text-align: center;
+    background: #f8f8f8;
+  }
+  .actor-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #d0d8e8;
+    border: 1px solid #555;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .95rem;
+    margin: 0 auto 6px;
+  }
+  .actor-box .aname {
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+  .actor-box .asub {
+    font-size: 8.5pt;
+    font-style: italic;
+    color: #555;
+  }
+  .actor-box.admin-type { background: #eff2f7; border-color: #3a5a9a; }
+  .actor-box.admin-type .actor-icon { background: #c0cedf; border-color: #3a5a9a; }
+  .actor-box.admin-type .aname { color: #1a2e5a; }
+
+  .uc-center { display: flex; flex-direction: column; gap: 12px; }
+  .uc-group { border: 1px solid #999; }
+  .uc-group-title {
+    font-size: 9pt;
+    font-weight: bold;
+    padding: 6px 12px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    border-bottom: 1px solid #999;
+    background: #efefef;
+    color: #1a1a1a;
+  }
+  .uc-group-title.gt-admin { background: #e8eef7; color: #1a2e5a; border-color: #7090c0; }
+  .uc-group-title.gt-super { background: #f0f0f0; color: #333; }
+  .uc-items { padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; }
+  .uc-item {
+    font-size: 9pt;
+    padding: 5px 10px;
+    border: 1px solid #bbb;
+    border-radius: 12px;
+    background: #fff;
+    display: flex; align-items: center; gap: 7px;
+    color: #1a1a1a;
+  }
+  .uc-item.uc-admin { border-color: #7090c0; background: #f0f4fb; color: #1a2e5a; }
+  .uc-item.uc-super { border-color: #888; background: #f5f5f5; color: #333; }
+  .uc-item .dot { width: 5px; height: 5px; border-radius: 50%; background: #666; flex-shrink: 0; }
+  .uc-item.uc-admin .dot { background: #3a5a9a; }
+  .uc-note { font-size: 8pt; font-style: italic; color: #666; margin-left: 4px; }
+
+  .uc-legend {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    margin-top: 12px; padding: 10px 14px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    font-size: 9pt;
+    font-style: italic;
+    color: #444;
+  }
+  .uc-legend-item { display: flex; align-items: center; gap: 8px; }
+  .leg-line { width: 30px; height: 0; border-top: 2px solid #555; }
+  .leg-dash { width: 30px; height: 0; border-top: 2px dashed #777; }
+
+  /* ════════════════════════════════
+     ACTIVITY
+  ════════════════════════════════ */
+  .act-timeline { display: flex; flex-direction: column; gap: 0; min-width: 600px; }
+  .act-row { display: grid; grid-template-columns: 46px 1fr; gap: 0 14px; }
+  .act-num-col { display: flex; flex-direction: column; align-items: center; }
+  .act-num {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9.5pt; font-weight: bold; font-family: 'Times New Roman', serif;
+    flex-shrink: 0; border: 1.5px solid #555; background: #fff; color: #1a1a1a;
+  }
+  .act-connector { width: 1px; flex: 1; min-height: 8px; background: #aaa; }
+  .act-body { padding-bottom: 10px; padding-top: 4px; }
+  .act-card {
+    padding: 8px 14px; font-size: 10pt; line-height: 1.5;
+    border: 1px solid #ccc; background: #fafafa; color: #1a1a1a;
+  }
+
+  /* node types */
+  .t-start .act-num { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .t-end   .act-num { background: #1a1a1a; color: #fff; border-color: #1a1a1a; outline: 2px solid #ccc; }
+  .t-user  .act-num { background: #e8eef7; border-color: #3a5a9a; color: #1a2e5a; }
+  .t-user  .act-card { background: #f3f6fb; border-color: #b0c0d8; }
+  .t-sys   .act-num { background: #f0f0f0; border-color: #555; color: #333; }
+  .t-sys   .act-card { background: #f5f5f5; border-color: #bbb; }
+  .t-dec   .act-num { background: #fffbe6; border-color: #a08000; color: #6b5200; font-style: italic; }
+  .t-dec   .act-card { background: #fffbe6; border-color: #c8a020; border-style: dashed; }
+  .t-admin .act-num { background: #e8eef7; border-color: #3a5a9a; color: #1a2e5a; }
+  .t-admin .act-card { background: #eff3fa; border-color: #90a8c8; }
+  .t-notif .act-num { background: #f5f5f5; border-color: #777; color: #333; }
+  .t-notif .act-card { background: #f8f8f8; border-color: #aaa; border-style: dashed; }
+
+  .act-card .badge {
+    font-size: 8pt; font-weight: bold; font-family: 'Times New Roman', serif;
+    padding: 1px 6px; border: 1px solid #999; margin-right: 5px;
+    background: #ebebeb; color: #333;
+  }
+  .badge-admin { background: #dde6f5; border-color: #7090c0; color: #1a2e5a; }
+  .badge-dec   { background: #fff8d0; border-color: #b09020; color: #5a3e00; }
+  .badge-sys   { background: #efefef; border-color: #888; color: #333; }
+  .badge-step  { background: #e8eef7; border-color: #5070a0; color: #1a2e5a; }
+
+  /* ════════════════════════════════
+     SEQUENCE (SVG)
+  ════════════════════════════════ */
+  .seq-svg { width: 100%; height: auto; }
+  .seq-section { margin-bottom: 28px; }
+  .seq-section-label {
+    font-size: 10pt; font-weight: bold; font-style: italic;
+    color: #333; margin-bottom: 10px;
+    padding-left: 8px; border-left: 3px solid #555;
+  }
+
+  /* ════════════════════════════════
+     CLASS DIAGRAM
+  ════════════════════════════════ */
+  .class-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    min-width: 680px;
+  }
+  .class-box { border: 1.5px solid #555; background: #fff; }
+  .class-box.cb-primary  { border-color: #3a5a9a; }
+  .class-box.cb-data     { border-color: #5a7ab0; }
+  .class-box.cb-system   { border-color: #777; }
+
+  .class-header {
+    padding: 7px 12px;
+    border-bottom: 1.5px solid #555;
+    background: #efefef;
+    font-size: 10pt; font-weight: bold;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .cb-primary .class-header  { background: #dde6f5; border-color: #3a5a9a; color: #1a2e5a; }
+  .cb-data    .class-header  { background: #e8eef7; border-color: #5a7ab0; color: #1a2e5a; }
+  .cb-system  .class-header  { background: #f0f0f0; border-color: #777; color: #333; }
+
+  .class-section { padding: 7px 12px; border-bottom: 1px solid #ddd; }
+  .class-section:last-child { border-bottom: none; }
+  .class-section-label {
+    font-size: 8pt; font-style: italic; color: #666;
+    text-transform: uppercase; letter-spacing: .8px; margin-bottom: 5px;
+  }
+  .class-attr, .class-method {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 8.5pt; color: #222; line-height: 1.8;
+    display: flex; gap: 5px;
+  }
+  .class-attr .vis, .class-method .vis { color: #666; }
+  .class-attr .aname { color: #1a1a1a; }
+  .class-attr .atype { color: #3a5a9a; }
+  .class-method .mname { color: #1a1a1a; }
+  .class-method .mret  { color: #555; font-style: italic; }
+  .enum-chip {
+    font-size: 7.5pt; font-family: 'Courier New', monospace;
+    border: 1px solid #aaa; background: #f0f0f0; color: #444;
+    padding: 0 4px; border-radius: 2px; margin-left: 3px; vertical-align: middle;
+  }
+
+  .rel-panel {
+    margin-top: 20px;
+    border: 1px solid #999;
+    padding: 14px 18px;
+    background: #fafafa;
+  }
+  .rel-panel-title {
+    font-size: 10.5pt; font-weight: bold; margin-bottom: 10px;
+    border-bottom: 1px solid #ccc; padding-bottom: 6px;
+  }
+  .rel-list { display: flex; flex-direction: column; gap: 6px; }
+  .rel-entry {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9pt; display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap; color: #333;
+  }
+  .rel-from { font-weight: bold; color: #1a2e5a; }
+  .rel-to   { font-weight: bold; color: #1a2e5a; }
+  .rel-type {
+    font-size: 8pt; padding: 1px 7px; border: 1px solid #aaa;
+    background: #ebebeb; color: #333;
+  }
+  .rel-desc { font-style: italic; color: #555; }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 12px;
+    border-top: 1.5px solid #1a1a1a;
+    font-size: 9pt;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* scrollable diagram wrapper */
+  .scroll-x { overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="page">
+
+
+  
+
+  <!-- ══ TAB NAVIGATION ══ -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="usecase" onclick="showTab('usecase')">I. Use Case Diagram</button>
+    <button class="tab-btn" data-tab="activity"  onclick="showTab('activity')">II. Activity Diagram</button>
+    <button class="tab-btn" data-tab="sequence"  onclick="showTab('sequence')">III. Sequence Diagram</button>
+    <button class="tab-btn" data-tab="class"     onclick="showTab('class')">IV. Class Diagram</button>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 1: USE CASE
+  ══════════════════════════════════ -->
+  <div id="tab-usecase" class="tab-content active">
+    <div class="section-heading">I. Use Case Diagram</div>
+    <div class="section-number">Bagian 1 — Identifikasi Aktor dan Kasus Penggunaan Sistem</div>
+
+    <div class="diagram-box">
+      <div class="diagram-title">Use Case Diagram — Sistem Informasi PPDB &amp; Profil Sekolah</div>
+      <div class="scroll-x">
+        <div class="uc-layout">
+
+          <!-- LEFT ACTORS -->
+          <div class="actor-col">
+            <div class="actor-box">
+              <div class="actor-icon">👤</div>
+              <div class="aname">Guest</div>
+              <div class="asub">Pengunjung Umum</div>
+            </div>
+            <div class="actor-box">
+              <div class="actor-icon">🎓</div>
+              <div class="aname">Calon Siswa</div>
+              <div class="asub">Pendaftar PPDB</div>
+            </div>
+            <div class="actor-box">
+              <div class="actor-icon">👨‍👩‍👧</div>
+              <div class="aname">Orang Tua / Wali</div>
+              <div class="asub">Co-Applicant</div>
+            </div>
+          </div>
+
+          <!-- CENTER: USE CASES -->
+          <div class="uc-center">
+
+            <div class="uc-group">
+              <div class="uc-group-title">Guest — Akses Publik</div>
+              <div class="uc-items">
+                <div class="uc-item"><span class="dot"></span>View School Profile</div>
+                <div class="uc-item"><span class="dot"></span>View News &amp; Announcements</div>
+                <div class="uc-item"><span class="dot"></span>View Contact Info</div>
+                <div class="uc-item"><span class="dot"></span>Register Account</div>
+              </div>
+            </div>
+
+            <div class="uc-group">
+              <div class="uc-group-title">Calon Siswa / Orang Tua — Proses PPDB</div>
+              <div class="uc-items">
+                <div class="uc-item"><span class="dot"></span>Login</div>
+                <div class="uc-item"><span class="dot"></span>Fill Student Data Form <span class="uc-note">«include»</span></div>
+                <div class="uc-item"><span class="dot"></span>Fill Parent Data Form <span class="uc-note">«include»</span></div>
+                <div class="uc-item"><span class="dot"></span>Upload Documents <span class="uc-note">«include»</span></div>
+                <div class="uc-item"><span class="dot"></span>Submit PPDB Application <span class="uc-note">«include» ketiga langkah di atas</span></div>
+                <div class="uc-item"><span class="dot"></span>View Application Status</div>
+                <div class="uc-item"><span class="dot"></span>Receive Notification</div>
+              </div>
+            </div>
+
+            <div class="uc-group">
+              <div class="uc-group-title gt-admin">Admin PPDB</div>
+              <div class="uc-items">
+                <div class="uc-item uc-admin"><span class="dot"></span>Login (Admin)</div>
+                <div class="uc-item uc-admin"><span class="dot"></span>View Applicant List</div>
+                <div class="uc-item uc-admin"><span class="dot"></span>Verify Documents <span class="uc-note">«extend» Set Status</span></div>
+                <div class="uc-item uc-admin"><span class="dot"></span>Set Application Status <span class="uc-note">«include» Send Notification</span></div>
+                <div class="uc-item uc-admin"><span class="dot"></span>Send Notification</div>
+              </div>
+            </div>
+
+            <div class="uc-group">
+              <div class="uc-group-title gt-super">Super Admin</div>
+              <div class="uc-items">
+                <div class="uc-item uc-super"><span class="dot"></span>Manage School Profile</div>
+                <div class="uc-item uc-super"><span class="dot"></span>Manage News (CRUD)</div>
+                <div class="uc-item uc-super"><span class="dot"></span>Manage PPDB Period (Open/Close)</div>
+                <div class="uc-item uc-super"><span class="dot"></span>Manage Admin Accounts</div>
+                <div class="uc-item uc-super"><span class="dot"></span>View Reports &amp; Statistics</div>
+              </div>
+            </div>
+
+            <div class="uc-legend">
+              <div class="uc-legend-item"><div class="leg-line"></div><span>«include» — sub-alur wajib dijalankan</span></div>
+              <div class="uc-legend-item"><div class="leg-dash"></div><span>«extend» — ekstensi kondisional</span></div>
+            </div>
+          </div>
+
+          <!-- RIGHT ACTORS -->
+          <div class="actor-col">
+            <div class="actor-box admin-type">
+              <div class="actor-icon">🛡</div>
+              <div class="aname">Admin PPDB</div>
+              <div class="asub">Verifikator</div>
+            </div>
+            <div class="actor-box admin-type">
+              <div class="actor-icon">⚙️</div>
+              <div class="aname">Super Admin</div>
+              <div class="asub">System Manager</div>
+            </div>
+            <div class="actor-box" style="border-color:#888">
+              <div class="actor-icon" style="background:#ddd">📧</div>
+              <div class="aname">Email Service</div>
+              <div class="asub">Notifikasi Otomatis</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="diagram-caption">
+        <strong>Gambar 1.</strong> Use Case Diagram Sistem Informasi PPDB Yayasan Darul Furqan Pariaman.<br>
+        Diagram ini menggambarkan aktor-aktor yang terlibat dalam sistem beserta kasus penggunaan masing-masing, mulai dari akses publik oleh Guest hingga pengelolaan penuh oleh Super Admin. Hubungan «include» dan «extend» menunjukkan ketergantungan antar use case.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 2: ACTIVITY
+  ══════════════════════════════════ -->
+  <div id="tab-activity" class="tab-content">
+    <div class="section-heading">II. Activity Diagram</div>
+    <div class="section-number">Bagian 2 — Alur Proses PPDB dari Awal hingga Keputusan Akhir</div>
+
+    <div class="diagram-box">
+      <div class="diagram-title">Activity Diagram — Alur Proses PPDB (Penerimaan Peserta Didik Baru)</div>
+      <div class="scroll-x">
+        <div class="act-timeline">
+
+          <div class="act-row t-start">
+            <div class="act-num-col"><div class="act-num">●</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card" style="font-style:italic;color:#444;background:#f5f5f5">
+              <strong>Mulai</strong> — Pengguna mengakses website Yayasan Darul Furqan Pariaman
+            </div></div>
+          </div>
+
+          <div class="act-row t-user">
+            <div class="act-num-col"><div class="act-num">1</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">Pengguna mengklik tombol <strong>"Daftar PPDB"</strong> pada halaman utama (Landing Page)</div></div>
+          </div>
+
+          <div class="act-row t-dec">
+            <div class="act-num-col"><div class="act-num" style="font-size:14pt">◇</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-dec">IF</span> Sudah memiliki akun → Login dengan email dan kata sandi<br>
+              <span class="badge badge-dec">ELSE</span> → Daftar akun baru (nama, email, kata sandi, nomor HP)
+            </div></div>
+          </div>
+
+          <div class="act-row t-sys">
+            <div class="act-num-col"><div class="act-num">3</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-sys">SISTEM</span>
+              <span class="badge badge-dec">IF</span> Registrasi baru → Sistem mengirim <strong>email verifikasi</strong><br>
+              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;Pengguna mengklik tautan konfirmasi di email
+            </div></div>
+          </div>
+
+          <div class="act-row t-user">
+            <div class="act-num-col"><div class="act-num">4</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">Pengguna masuk ke <strong>Dashboard Pendaftar</strong> — mengklik "Mulai Pendaftaran"</div></div>
+          </div>
+
+          <div class="act-row t-user">
+            <div class="act-num-col"><div class="act-num">5</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-step">LANGKAH 1</span> <strong>Data Siswa</strong><br>
+              Mengisi: nama lengkap, tanggal lahir, jenis kelamin, alamat, agama, asal sekolah, NISN
+            </div></div>
+          </div>
+
+          <div class="act-row t-user">
+            <div class="act-num-col"><div class="act-num">6</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-step">LANGKAH 2</span> <strong>Data Orang Tua / Wali</strong><br>
+              Mengisi: nama ayah/ibu/wali, pekerjaan, penghasilan, nomor HP, alamat
+            </div></div>
+          </div>
+
+          <div class="act-row t-user">
+            <div class="act-num-col"><div class="act-num">7</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-step">LANGKAH 3</span> <strong>Unggah Dokumen</strong><br>
+              Kartu Keluarga (KK) · Akta Kelahiran · Ijazah / SKL · Pas Foto · Rapor (jika diperlukan)
+            </div></div>
+          </div>
+
+          <div class="act-row t-dec">
+            <div class="act-num-col"><div class="act-num" style="font-size:14pt">◇</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-dec">IF</span> Format atau ukuran file tidak valid → Sistem menampilkan pesan kesalahan → Pengguna mengunggah ulang<br>
+              <span class="badge badge-dec">ELSE</span> File valid → Lanjut ke langkah berikutnya
+            </div></div>
+          </div>
+
+          <div class="act-row t-user">
+            <div class="act-num-col"><div class="act-num">8</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-step">LANGKAH 4</span> <strong>Tinjauan &amp; Pengiriman</strong><br>
+              Sistem menampilkan ringkasan seluruh data — Pengguna melakukan pengecekan akhir
+            </div></div>
+          </div>
+
+          <div class="act-row t-dec">
+            <div class="act-num-col"><div class="act-num" style="font-size:14pt">◇</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-dec">IF</span> Pengguna ingin memperbaiki data → Kembali ke langkah terkait<br>
+              <span class="badge badge-dec">ELSE</span> Pengguna mengklik <strong>"Kirim Pendaftaran"</strong>
+            </div></div>
+          </div>
+
+          <div class="act-row t-sys">
+            <div class="act-num-col"><div class="act-num">10</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-sys">SISTEM</span> Formulir dikunci (baca saja) · Waktu pengiriman dicatat · Status diubah menjadi <strong>Menunggu (Pending)</strong><br>
+              Konfirmasi ditampilkan di layar dan email konfirmasi dikirim kepada pendaftar
+            </div></div>
+          </div>
+
+          <div class="act-row t-admin">
+            <div class="act-num-col"><div class="act-num">11</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-admin">ADMIN</span> Admin masuk ke dashboard → Melihat daftar pendaftar baru / menunggu verifikasi
+            </div></div>
+          </div>
+
+          <div class="act-row t-admin">
+            <div class="act-num-col"><div class="act-num">12</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-admin">ADMIN</span> Admin membuka detail pendaftar → Memeriksa dokumen satu per satu
+            </div></div>
+          </div>
+
+          <div class="act-row t-dec">
+            <div class="act-num-col"><div class="act-num" style="font-size:14pt">◇</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-dec">IF</span> Dokumen tidak lengkap / tidak valid → Admin memberikan catatan → Notifikasi dikirim kepada pendaftar untuk mengunggah ulang<br>
+              <span class="badge badge-dec">ELSE</span> Semua dokumen valid → Admin menandai status <strong>"Terverifikasi"</strong>
+            </div></div>
+          </div>
+
+          <div class="act-row t-admin">
+            <div class="act-num-col"><div class="act-num">13</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              <span class="badge badge-admin">ADMIN</span> Admin menetapkan keputusan akhir: <strong>Diterima</strong> atau <strong>Tidak Diterima</strong>
+            </div></div>
+          </div>
+
+          <div class="act-row t-notif">
+            <div class="act-num-col"><div class="act-num">14</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card">
+              Sistem mengirim <strong>notifikasi hasil akhir</strong> kepada pendaftar melalui email dan dashboard.<br>
+              Pendaftar login dan melihat status: <strong>Diterima</strong> atau <strong>Tidak Diterima</strong>
+            </div></div>
+          </div>
+
+          <div class="act-row t-end">
+            <div class="act-num-col"><div class="act-num">⬤</div><div class="act-connector"></div></div>
+            <div class="act-body"><div class="act-card" style="font-style:italic;color:#444;background:#f5f5f5">
+              <strong>Selesai</strong> — Proses PPDB telah selesai dilaksanakan
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="diagram-caption">
+        <strong>Gambar 2.</strong> Activity Diagram Proses PPDB Yayasan Darul Furqan Pariaman.<br>
+        Diagram ini menggambarkan alur kegiatan dari akses awal pengguna hingga pengumuman keputusan oleh admin. Terdapat 14 langkah utama yang mencakup sisi pengguna (biru), sistem (abu-abu), dan admin (biru tua), dengan titik keputusan bercabang di beberapa tahap kritis.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 3: SEQUENCE
+  ══════════════════════════════════ -->
+  <div id="tab-sequence" class="tab-content">
+    <div class="section-heading">III. Sequence Diagram</div>
+    <div class="section-number">Bagian 3 — Alur Interaksi Antar Objek: Registrasi, Pengiriman PPDB, dan Verifikasi Admin</div>
+
+    <div class="diagram-box">
+      <div class="diagram-title">Sequence Diagram — Interaksi Sistem PPDB</div>
+      <div class="scroll-x">
+
+        <!-- SEQ 3.1 -->
+        <div class="seq-section">
+          <div class="seq-section-label">3.1 — Registrasi dan Login Pengguna</div>
+          <svg viewBox="0 0 780 390" class="seq-svg" xmlns="http://www.w3.org/2000/svg"
+               style="font-family:'Times New Roman',Times,serif; background:#fff;">
+            <defs>
+              <marker id="arr1" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                <polygon points="0 0, 8 3.5, 0 7" fill="#1a1a1a"/>
+              </marker>
+              <marker id="arrg1" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                <polygon points="0 0, 8 3.5, 0 7" fill="#777"/>
+              </marker>
+            </defs>
+
+            <!-- Participant boxes -->
+            <rect x="20"  y="12" width="130" height="34" fill="#e8eef7" stroke="#3a5a9a" stroke-width="1.5"/>
+            <text x="85"  y="33" text-anchor="middle" fill="#1a2e5a" font-size="11" font-weight="bold">Calon Siswa</text>
+
+            <rect x="185" y="12" width="130" height="34" fill="#f0f0f0" stroke="#555" stroke-width="1.5"/>
+            <text x="250" y="33" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="bold">Web Application</text>
+
+            <rect x="350" y="12" width="130" height="34" fill="#f0f0f0" stroke="#555" stroke-width="1.5"/>
+            <text x="415" y="33" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="bold">Database</text>
+
+            <rect x="510" y="12" width="130" height="34" fill="#f5f5e8" stroke="#888" stroke-width="1.5"/>
+            <text x="575" y="33" text-anchor="middle" fill="#444" font-size="11" font-weight="bold">Email Service</text>
+
+            <!-- Lifelines -->
+            <line x1="85"  y1="46" x2="85"  y2="378" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="250" y1="46" x2="250" y2="378" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="415" y1="46" x2="415" y2="378" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="575" y1="46" x2="575" y2="378" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+
+            <!-- Messages -->
+            <line x1="85" y1="82" x2="242" y2="82" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="163" y="76" text-anchor="middle" fill="#1a1a1a" font-size="10">register(email, password, phone)</text>
+
+            <line x1="250" y1="108" x2="407" y2="108" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="328" y="102" text-anchor="middle" fill="#1a1a1a" font-size="10">checkEmailDuplicate()</text>
+
+            <line x1="415" y1="132" x2="258" y2="132" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg1)"/>
+            <text x="336" y="126" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← not_duplicate</text>
+
+            <line x1="250" y1="158" x2="407" y2="158" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="328" y="152" text-anchor="middle" fill="#1a1a1a" font-size="10">saveUser(data)</text>
+
+            <line x1="415" y1="184" x2="567" y2="184" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="492" y="178" text-anchor="middle" fill="#1a1a1a" font-size="10">sendVerificationEmail(token)</text>
+
+            <line x1="250" y1="210" x2="93" y2="210" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg1)"/>
+            <text x="170" y="204" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← promptEmailVerification</text>
+
+            <line x1="85" y1="236" x2="567" y2="236" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="325" y="230" text-anchor="middle" fill="#1a1a1a" font-size="10">clickVerificationLink(token)</text>
+
+            <line x1="575" y1="262" x2="423" y2="262" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="500" y="256" text-anchor="middle" fill="#1a1a1a" font-size="10">verifyToken()</text>
+
+            <line x1="415" y1="288" x2="258" y2="288" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg1)"/>
+            <text x="336" y="282" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← token_valid</text>
+
+            <line x1="85" y1="314" x2="242" y2="314" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="163" y="308" text-anchor="middle" fill="#1a1a1a" font-size="10">login(email, password)</text>
+
+            <line x1="250" y1="340" x2="407" y2="340" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr1)"/>
+            <text x="328" y="334" text-anchor="middle" fill="#1a1a1a" font-size="10">checkCredentials()</text>
+
+            <line x1="415" y1="366" x2="93" y2="366" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg1)"/>
+            <text x="254" y="360" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← authToken + redirectDashboard</text>
+          </svg>
+        </div>
+
+        <!-- SEQ 3.2 -->
+        <div class="seq-section">
+          <div class="seq-section-label">3.2 — Pengiriman Formulir PPDB</div>
+          <svg viewBox="0 0 780 400" class="seq-svg" xmlns="http://www.w3.org/2000/svg"
+               style="font-family:'Times New Roman',Times,serif; background:#fff;">
+            <defs>
+              <marker id="arr2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                <polygon points="0 0, 8 3.5, 0 7" fill="#1a1a1a"/>
+              </marker>
+              <marker id="arrg2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                <polygon points="0 0, 8 3.5, 0 7" fill="#777"/>
+              </marker>
+            </defs>
+            <rect x="20"  y="12" width="130" height="34" fill="#e8eef7" stroke="#3a5a9a" stroke-width="1.5"/>
+            <text x="85"  y="33" text-anchor="middle" fill="#1a2e5a" font-size="11" font-weight="bold">Calon Siswa</text>
+            <rect x="185" y="12" width="130" height="34" fill="#f0f0f0" stroke="#555" stroke-width="1.5"/>
+            <text x="250" y="33" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="bold">Web Application</text>
+            <rect x="350" y="12" width="130" height="34" fill="#f0f0f0" stroke="#555" stroke-width="1.5"/>
+            <text x="415" y="33" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="bold">Database</text>
+            <rect x="510" y="12" width="130" height="34" fill="#eff2f7" stroke="#3a5a9a" stroke-width="1.5"/>
+            <text x="575" y="33" text-anchor="middle" fill="#1a2e5a" font-size="11" font-weight="bold">Admin PPDB</text>
+
+            <line x1="85"  y1="46" x2="85"  y2="392" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="250" y1="46" x2="250" y2="392" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="415" y1="46" x2="415" y2="392" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="575" y1="46" x2="575" y2="392" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+
+            <line x1="85" y1="80" x2="242" y2="80" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="163" y="74" text-anchor="middle" fill="#1a1a1a" font-size="10">openForm()</text>
+
+            <line x1="250" y1="106" x2="407" y2="106" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="328" y="100" text-anchor="middle" fill="#1a1a1a" font-size="10">loadDraft(userId)</text>
+
+            <line x1="415" y1="130" x2="258" y2="130" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg2)"/>
+            <text x="336" y="124" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← draftData</text>
+
+            <line x1="250" y1="154" x2="93" y2="154" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg2)"/>
+            <text x="170" y="148" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← renderMultiStepForm</text>
+
+            <line x1="85" y1="180" x2="242" y2="180" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="163" y="174" text-anchor="middle" fill="#1a1a1a" font-size="10">submitStep1(studentData)</text>
+
+            <line x1="250" y1="206" x2="407" y2="206" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="328" y="200" text-anchor="middle" fill="#1a1a1a" font-size="10">savePartial(step1)</text>
+
+            <line x1="85" y1="232" x2="242" y2="232" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="163" y="226" text-anchor="middle" fill="#1a1a1a" font-size="10">submitStep2(parentData)</text>
+
+            <line x1="250" y1="258" x2="407" y2="258" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="328" y="252" text-anchor="middle" fill="#1a1a1a" font-size="10">savePartial(step2)</text>
+
+            <line x1="85" y1="284" x2="242" y2="284" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="163" y="278" text-anchor="middle" fill="#1a1a1a" font-size="10">uploadDocuments(files[])</text>
+
+            <line x1="250" y1="310" x2="407" y2="310" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="328" y="304" text-anchor="middle" fill="#1a1a1a" font-size="10">storeFiles() → status: pending</text>
+
+            <line x1="85" y1="336" x2="242" y2="336" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="163" y="330" text-anchor="middle" fill="#1a1a1a" font-size="10">finalSubmit()</text>
+
+            <line x1="250" y1="362" x2="407" y2="362" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="328" y="356" text-anchor="middle" fill="#1a1a1a" font-size="10">setStatus(pending)</text>
+
+            <line x1="415" y1="386" x2="563" y2="386" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr2)"/>
+            <text x="490" y="380" text-anchor="middle" fill="#1a1a1a" font-size="10">notifyAdmin(newApplication)</text>
+          </svg>
+        </div>
+
+        <!-- SEQ 3.3 -->
+        <div class="seq-section">
+          <div class="seq-section-label">3.3 — Verifikasi oleh Admin PPDB</div>
+          <svg viewBox="0 0 780 374" class="seq-svg" xmlns="http://www.w3.org/2000/svg"
+               style="font-family:'Times New Roman',Times,serif; background:#fff;">
+            <defs>
+              <marker id="arr3" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                <polygon points="0 0, 8 3.5, 0 7" fill="#1a1a1a"/>
+              </marker>
+              <marker id="arrg3" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                <polygon points="0 0, 8 3.5, 0 7" fill="#777"/>
+              </marker>
+            </defs>
+            <rect x="20"  y="12" width="130" height="34" fill="#eff2f7" stroke="#3a5a9a" stroke-width="1.5"/>
+            <text x="85"  y="33" text-anchor="middle" fill="#1a2e5a" font-size="11" font-weight="bold">Admin PPDB</text>
+            <rect x="185" y="12" width="130" height="34" fill="#f0f0f0" stroke="#555" stroke-width="1.5"/>
+            <text x="250" y="33" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="bold">Web Application</text>
+            <rect x="350" y="12" width="130" height="34" fill="#f0f0f0" stroke="#555" stroke-width="1.5"/>
+            <text x="415" y="33" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="bold">Database</text>
+            <rect x="510" y="12" width="130" height="34" fill="#e8eef7" stroke="#3a5a9a" stroke-width="1.5"/>
+            <text x="575" y="33" text-anchor="middle" fill="#1a2e5a" font-size="11" font-weight="bold">Calon Siswa</text>
+
+            <line x1="85"  y1="46" x2="85"  y2="366" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="250" y1="46" x2="250" y2="366" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="415" y1="46" x2="415" y2="366" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="575" y1="46" x2="575" y2="366" stroke="#aaa" stroke-width="1" stroke-dasharray="5,4"/>
+
+            <line x1="85" y1="80" x2="242" y2="80" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="163" y="74" text-anchor="middle" fill="#1a1a1a" font-size="10">login(admin_credentials)</text>
+
+            <line x1="250" y1="106" x2="93" y2="106" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg3)"/>
+            <text x="170" y="100" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← renderAdminDashboard</text>
+
+            <line x1="85" y1="132" x2="242" y2="132" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="163" y="126" text-anchor="middle" fill="#1a1a1a" font-size="10">viewApplicantList()</text>
+
+            <line x1="250" y1="158" x2="407" y2="158" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="328" y="152" text-anchor="middle" fill="#1a1a1a" font-size="10">fetchApplications()</text>
+
+            <line x1="415" y1="184" x2="258" y2="184" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg3)"/>
+            <text x="336" y="178" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← applicationList[]</text>
+
+            <line x1="250" y1="210" x2="93" y2="210" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg3)"/>
+            <text x="170" y="204" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← renderTable</text>
+
+            <line x1="85" y1="236" x2="242" y2="236" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="163" y="230" text-anchor="middle" fill="#1a1a1a" font-size="10">openApplicantDetail(appId)</text>
+
+            <line x1="250" y1="262" x2="407" y2="262" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="328" y="256" text-anchor="middle" fill="#1a1a1a" font-size="10">fetchDocuments(appId)</text>
+
+            <line x1="415" y1="288" x2="258" y2="288" stroke="#777" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrg3)"/>
+            <text x="336" y="282" text-anchor="middle" fill="#666" font-size="10" font-style="italic">← docs[] + studentData</text>
+
+            <line x1="85" y1="314" x2="242" y2="314" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="163" y="308" text-anchor="middle" fill="#1a1a1a" font-size="10">setDecision(accepted | rejected)</text>
+
+            <line x1="250" y1="340" x2="407" y2="340" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="328" y="334" text-anchor="middle" fill="#1a1a1a" font-size="10">saveDecision(status)</text>
+
+            <line x1="415" y1="364" x2="563" y2="364" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#arr3)"/>
+            <text x="490" y="358" text-anchor="middle" fill="#1a1a1a" font-size="10">notifyApplicant(result)</text>
+          </svg>
+        </div>
+
+      </div>
+      <div class="diagram-caption">
+        <strong>Gambar 3.</strong> Sequence Diagram Sistem Informasi PPDB Yayasan Darul Furqan Pariaman.<br>
+        Diagram ini menggambarkan interaksi antar objek dalam tiga skenario utama: (3.1) proses registrasi dan login, (3.2) pengisian dan pengiriman formulir PPDB secara bertahap, serta (3.3) verifikasi dokumen dan penetapan keputusan oleh Admin. Garis putus-putus merepresentasikan pesan balikan (<em>return message</em>).
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 4: CLASS
+  ══════════════════════════════════ -->
+  <div id="tab-class" class="tab-content">
+    <div class="section-heading">IV. Class Diagram</div>
+    <div class="section-number">Bagian 4 — Struktur Kelas, Atribut, Metode, dan Relasi Antar Kelas</div>
+
+    <div class="diagram-box">
+      <div class="diagram-title">Class Diagram — Model Domain Sistem PPDB &amp; Profil Sekolah</div>
+      <div class="scroll-x">
+        <div class="class-grid">
+
+          <!-- User -->
+          <div class="class-box cb-primary">
+            <div class="class-header"><span>👤</span> User</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">name</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">email</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">password</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">role</span><span class="atype">&nbsp;: enum</span><span class="enum-chip">applicant | admin | superadmin</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">isVerified</span><span class="atype">&nbsp;: bool</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">createdAt</span><span class="atype">&nbsp;: datetime</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">login()</span><span class="mret">&nbsp;: Token</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">register()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">verifyEmail(token)</span><span class="mret">&nbsp;: bool</span></div>
+            </div>
+          </div>
+
+          <!-- PPDBApplication -->
+          <div class="class-box cb-primary" style="border-color:#4a7a40">
+            <div class="class-header" style="background:#e8f5e0;border-color:#4a7a40;color:#1a3a10"><span>📋</span> PPDBApplication</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">userId</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">periodId</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">submittedAt</span><span class="atype">&nbsp;: datetime</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">status</span><span class="atype">&nbsp;: enum</span><span class="enum-chip">draft | pending | verified | accepted | rejected</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">adminNote</span><span class="atype">&nbsp;: string</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">submit()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">updateStatus(s)</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">getStatusLabel()</span><span class="mret">&nbsp;: string</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">lock()</span><span class="mret">&nbsp;: void</span></div>
+            </div>
+          </div>
+
+          <!-- Document -->
+          <div class="class-box cb-system">
+            <div class="class-header"><span>📁</span> Document</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">applicationId</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">type</span><span class="atype">&nbsp;: enum</span><span class="enum-chip">KK | akta | ijazah | foto | rapor</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">filePath</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">fileSize</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">status</span><span class="atype">&nbsp;: enum</span><span class="enum-chip">pending | approved | rejected</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">uploadedAt</span><span class="atype">&nbsp;: datetime</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">upload(file)</span><span class="mret">&nbsp;: bool</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">validateFormat()</span><span class="mret">&nbsp;: bool</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">approve()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">reject(note)</span><span class="mret">&nbsp;: void</span></div>
+            </div>
+          </div>
+
+          <!-- StudentData -->
+          <div class="class-box cb-data">
+            <div class="class-header"><span>🎓</span> StudentData</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">applicationId</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">fullName</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">birthDate</span><span class="atype">&nbsp;: date</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">gender</span><span class="atype">&nbsp;: enum</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">address</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">religion</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">prevSchool</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">nisn</span><span class="atype">&nbsp;: string</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">validate()</span><span class="mret">&nbsp;: bool</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">save()</span><span class="mret">&nbsp;: void</span></div>
+            </div>
+          </div>
+
+          <!-- ParentData -->
+          <div class="class-box cb-data">
+            <div class="class-header"><span>👨‍👩‍👧</span> ParentData</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">applicationId</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">fatherName</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">motherName</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">guardianName</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">job</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">income</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">phone</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">address</span><span class="atype">&nbsp;: string</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">validate()</span><span class="mret">&nbsp;: bool</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">save()</span><span class="mret">&nbsp;: void</span></div>
+            </div>
+          </div>
+
+          <!-- Notification -->
+          <div class="class-box cb-system">
+            <div class="class-header"><span>🔔</span> Notification</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">userId</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">message</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">type</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">isRead</span><span class="atype">&nbsp;: bool</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">createdAt</span><span class="atype">&nbsp;: datetime</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">send()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">markRead()</span><span class="mret">&nbsp;: void</span></div>
+            </div>
+          </div>
+
+          <!-- SchoolProfile -->
+          <div class="class-box cb-system">
+            <div class="class-header"><span>🏫</span> SchoolProfile</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">name</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">vision</span><span class="atype">&nbsp;: text</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">mission</span><span class="atype">&nbsp;: text</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">address</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">phone</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">email</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">logo</span><span class="atype">&nbsp;: string</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">update(data)</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">getProfile()</span><span class="mret">&nbsp;: SchoolProfile</span></div>
+            </div>
+          </div>
+
+          <!-- News -->
+          <div class="class-box cb-system">
+            <div class="class-header"><span>📰</span> News</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">title</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">body</span><span class="atype">&nbsp;: text</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">thumbnail</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">isPublished</span><span class="atype">&nbsp;: bool</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">authorId</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">publishedAt</span><span class="atype">&nbsp;: datetime</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">publish()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">unpublish()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">delete()</span><span class="mret">&nbsp;: void</span></div>
+            </div>
+          </div>
+
+          <!-- PPDBPeriod -->
+          <div class="class-box cb-system">
+            <div class="class-header"><span>📅</span> PPDBPeriod</div>
+            <div class="class-section">
+              <div class="class-section-label">Atribut</div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">id</span><span class="atype">&nbsp;: int</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">year</span><span class="atype">&nbsp;: string</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">startDate</span><span class="atype">&nbsp;: date</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">endDate</span><span class="atype">&nbsp;: date</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">isActive</span><span class="atype">&nbsp;: bool</span></div>
+              <div class="class-attr"><span class="vis">-</span><span class="aname">quota</span><span class="atype">&nbsp;: int</span></div>
+            </div>
+            <div class="class-section">
+              <div class="class-section-label">Metode</div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">open()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">close()</span><span class="mret">&nbsp;: void</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">isOpen()</span><span class="mret">&nbsp;: bool</span></div>
+              <div class="class-method"><span class="vis">+</span><span class="mname">getStats()</span><span class="mret">&nbsp;: object</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Relationships -->
+        <div class="rel-panel">
+          <div class="rel-panel-title">Relasi Antar Kelas</div>
+          <div class="rel-list">
+            <div class="rel-entry">
+              <span class="rel-from">User</span>
+              <span class="rel-type">1 → 0..1</span>
+              <span class="rel-to">PPDBApplication</span>
+              <span class="rel-desc">— (Asosiasi) Satu user memiliki paling banyak satu application PPDB</span>
+            </div>
+            <div class="rel-entry">
+              <span class="rel-from">PPDBApplication</span>
+              <span class="rel-type">1 → 1</span>
+              <span class="rel-to">StudentData</span>
+              <span class="rel-desc">— (Komposisi) Data siswa merupakan bagian tak terpisah dari application</span>
+            </div>
+            <div class="rel-entry">
+              <span class="rel-from">PPDBApplication</span>
+              <span class="rel-type">1 → 1</span>
+              <span class="rel-to">ParentData</span>
+              <span class="rel-desc">— (Komposisi) Data orang tua merupakan bagian tak terpisah dari application</span>
+            </div>
+            <div class="rel-entry">
+              <span class="rel-from">PPDBApplication</span>
+              <span class="rel-type">1 → *</span>
+              <span class="rel-to">Document</span>
+              <span class="rel-desc">— (Agregasi) Satu application memiliki banyak dokumen yang diunggah</span>
+            </div>
+            <div class="rel-entry">
+              <span class="rel-from">PPDBApplication</span>
+              <span class="rel-type">memicu →</span>
+              <span class="rel-to">Notification</span>
+              <span class="rel-desc">— (Dependensi) Perubahan status application memicu pengiriman notifikasi</span>
+            </div>
+            <div class="rel-entry">
+              <span class="rel-from">User</span>
+              <span class="rel-type">menerima</span>
+              <span class="rel-to">Notification</span>
+              <span class="rel-desc">— (Asosiasi) Notifikasi dikirimkan kepada user yang bersangkutan</span>
+            </div>
+            <div class="rel-entry">
+              <span class="rel-from">PPDBPeriod</span>
+              <span class="rel-type">1 → *</span>
+              <span class="rel-to">PPDBApplication</span>
+              <span class="rel-desc">— (Asosiasi) Satu periode PPDB dapat menampung banyak pendaftaran</span>
+            </div>
+            <div class="rel-entry">
+              <span class="rel-from">User (superadmin)</span>
+              <span class="rel-type">mengelola →</span>
+              <span class="rel-to">SchoolProfile · News · PPDBPeriod</span>
+              <span class="rel-desc">— (Dependensi) Super Admin bertanggung jawab atas konten dan konfigurasi sistem</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="diagram-caption">
+        <strong>Gambar 4.</strong> Class Diagram Model Domain Sistem Informasi PPDB Yayasan Darul Furqan Pariaman.<br>
+        Diagram ini mendeskripsikan sembilan kelas utama beserta atribut, metode, dan relasi antar kelas. Simbol visibilitas mengikuti konvensi UML standar: tanda minus (−) untuk <em>private</em> dan tanda plus (+) untuk <em>public</em>. Relasi mencakup komposisi, agregasi, asosiasi, dan dependensi.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <div class="page-footer">
+    <span>Yayasan Darul Furqan Pariaman — Sistem Informasi Sekolah &amp; PPDB</span>
+    <span>Analisis dan Perancangan Sistem Informasi — 2024/2025</span>
+  </div>
+
+</div>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelector('[data-tab="' + name + '"]').classList.add('active');
+  }
+</script>
+</body>
+</html>
